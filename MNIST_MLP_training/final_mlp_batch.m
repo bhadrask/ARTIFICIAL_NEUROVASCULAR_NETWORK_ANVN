@@ -12,7 +12,7 @@ rng('default');
 eta_max = 0.3;
 eta_min = 0.05;
 epoch = 20000;
-ln = 512;
+ln = 128;
 test_size = 200;
 train_size = 500;
 flag = 0;
@@ -161,5 +161,5 @@ fprintf('Test Accuracy : %f\n', accuracy_test);
 
 
 
-str = strcat('MNIST_mlp_Train_',num2str(train_size),'_test_',num2str(test_size),'_epochs_',num2str(epoch),'.mat');
+str = strcat('LN_',num2str(ln),'_MNIST_mlp_Train_',num2str(train_size),'_test_',num2str(test_size),'_epochs_',num2str(epoch),'.mat');
 save(str)

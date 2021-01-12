@@ -11,9 +11,9 @@ clc;
 colorc = jet(65);
 branching =[16,256,512];
 ACC=0;
-for avg=1:1
+for avg=1:10
     for k = 1:numel(branching)
-        vas.ln = 512;           % number of leaf nodes
+       
         vas.dim = 2 ;          % dimension of the position coordinates
         vas.energy_in = 0;     % initialising this to 0 to make energy supply variable inside epochs
         vas.eta = 0.1;          % learning rule parameter for vascular side
@@ -21,11 +21,15 @@ for avg=1:1
      
         
         str = "k" + '_'+ string(branching(k)) + '.mat';
-load('D:\google_drive\PhD\Codes_Published\ANVN\MNIST_MLP_training\MNIST_mlp_Train_500_test_200_epochs_20000.mat')
-           mlp.test_size = test_size;
+ load('C:\Users\Bhadra\Documents\GitHub\ANVN_FINAL\MNIST_MLP_training\LN_128_MNIST_mlp_Train_500_test_200_epochs_20000.mat')
+           vas.ln = ln;           % number of leaf nodes
+ mlp.test_size = test_size;
         mlp.train_size = train_size;
-[test.test_images, test.test_labels, mlp.X1, mlp.labels]=load_mnist(mlp.test_size);
-        
+% [test.test_images, test.test_labels, mlp.X1, mlp.labels]=load_mnist(mlp.test_size);
+     test.test_images=test_images; 
+     test.test_labels=test_labels;
+     mlp.X1=images;
+     mlp.labels=labels;
         %% Vascular side training
         %     rng(rng_saver);
         vas.energy_mat = [1,10:10:100,150:50:600];
@@ -74,10 +78,10 @@ load('D:\google_drive\PhD\Codes_Published\ANVN\MNIST_MLP_training\MNIST_mlp_Trai
         acc1(k,:)=accuracy_recheck;
         
 %         cd C:\Users\Nagavarshini\Desktop\Newvascular\Vascular_Tree\Vascular_Tree\task_2\trials
-cd D:\google_drive\PhD\Codes_Published\ANVN\MNIST_TASK2_Sequential\Task2_data
+cd C:\Users\Bhadra\Documents\GitHub\ANVN_FINAL\MNIST_TASK2_Sequential\Task2_data_server
          str =  'opti_k_' + string(branching(k)) + '_trial_' + string((avg)) +'.mat';
          save(str,'savee1','saveb1','accuracy_recheck');
-         cd D:\google_drive\PhD\Codes_Published\ANVN\MNIST_TASK2_Sequential
+         cd C:\Users\Bhadra\Documents\GitHub\ANVN_FINAL\MNIST_TASK2_Sequential
     end
      legend('k = 16','k = 256','k = 512')
     ACC = ACC + acc1;    
@@ -93,4 +97,4 @@ title('Accuracy vs Root node energy Optimal training');
 hold off;
 % legend('k = 16','k = 256','k = 512')
 Energy=vas.energy_mat;
-   save('Task2_MNIST_data_K_Vary','Energy','ACC');
+   save('Ln128_Task2_MNIST_data_K_Vary','Energy','ACC');
