@@ -1,0 +1,38 @@
+clear all;
+close all;
+clc;
+vas.energy_mat = [10:10:100,200:100:500];
+branching =[2,3,4,6,8,32,512];
+colorc = jet(100);
+fr=floor(100/numel(branching));
+%% TASK 1 : UNTRAINED
+load('task1_MNIST_data_final_2021.mat')
+for k =1:numel(branching)
+  figure(1);  plot(vas.energy_mat, ACC(k,:),'color',colorc(fr*k,:));ylim([0 100]);
+            title(['Accuracy check vs Root node energy Optimal training'])
+        ylabel('Accuracy')
+        xlabel('Root node energy');
+hold on;
+efficiency(k,:)=ACC(k,:)./Energy;
+efficiency(k,:)=efficiency(k,:)./max(efficiency(k,:));
+figure(2);
+       yyaxis left
+       ylim([0,1])
+    plot(Energy,ACC(k,:)/100); xlabel('Energy at Root Node');
+    ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex')
+    hold on;
+       yyaxis right
+    plot(Energy,efficiency(k,:));ylabel('Normalized Energy Efficiency');hold on;
+end
+legend('k=2','k=3','k=4','k=6','k=8','k=32','k=512');
+
+%% Sequential Training
+
+
+load('task2_MNIST_data_final_2021.mat');
+
+for k =1:numel(branching)
+  figure(1);  plot(vas.energy_mat, ACC(k,:),'color',colorc(fr*k,:));ylim([0 100]);
+            title(['Accuracy check vs Root node energy Optimal training'])
+        ylabel('Accuracy')
+        xlabel('Root node energy');
