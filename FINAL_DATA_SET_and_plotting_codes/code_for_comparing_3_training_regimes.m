@@ -3,7 +3,7 @@ close all;
 clc;
 vas.energy_mat = [10:10:100,200:100:500];
 branching =[2,3,4,6,8,32,512];
-chosen_k=8;
+chosen_k=32;
 loc_comp=find(branching==chosen_k);
 
 colorc = jet(100);
