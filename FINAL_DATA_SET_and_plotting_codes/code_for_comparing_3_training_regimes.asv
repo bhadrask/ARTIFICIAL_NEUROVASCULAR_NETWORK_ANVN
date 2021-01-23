@@ -106,8 +106,33 @@ for k =1:numel(branching)
       disp(['k=',num2str(branching(k)),', maxeff=',num2str(max(EFFnew(k,:))),', at root E=',num2str(Energy(find(EFFnew(k,:)==max(EFFnew(k,:)))))])
 
 end
+for j=k
+chosenk=find(k==j);
+for i=1:tr
+    acc_chosen(i,:)=Acc_trials{chosenk,i}/100;
+    eff_chosen(i,:)=Eff_trials{chosenk,i};
+end
 
-figure(10);
+mean_acc=mean(acc_chosen,1);
+mean_eff=mean(eff_chosen,1);
+std_acc=std(acc_chosen,1);
+std_eff=std(eff_chosen,1);
+opt = {'k','Linew',2,'LineS','none'};
+
+figure();
+       yyaxis left ;ylim([0,1]);
+    plot(evec,Acc(chosenk,:)/100); hold on;
+    errorbar(evec,mean_acc,std_acc,opt{:});
+    xlabel('Energy at Root Node');
+    ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex')
+    hold on;
+       yyaxis right;ylim([0,1]);
+    plot(evec,efficiency(chosenk,:)); hold on;
+        errorbar(evec,mean_eff,std_eff,opt{:});
+    ylabel('Normalized Energy Efficiency');
+    title(['Branching=',num2str(j)]);
+end
+figure();
 
  yyaxis left
        ylim([0,1])
