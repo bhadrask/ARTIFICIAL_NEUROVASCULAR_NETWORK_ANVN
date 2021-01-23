@@ -9,7 +9,7 @@ clc;
 % rng_saver = rng();
 
 colorc = jet(65);
-branching =[16,256,512];
+branching =[16,64,256];%[2,3,4,6,8,32,512];
 ACC=0;
 for avg=1:10
     for k = 1:numel(branching)
@@ -21,7 +21,7 @@ for avg=1:10
      
         
         str = "k" + '_'+ string(branching(k)) + '.mat';
- load('C:\Users\Bhadra\Documents\GitHub\ANVN_FINAL\MNIST_MLP_training\LN_128_MNIST_mlp_Train_500_test_200_epochs_20000.mat')
+ load('C:\Users\Bhadra\Documents\GitHub\ANVN_FINAL\MNIST_MLP_training\MNIST_mlp_Train_500_test_200_epochs_20000.mat')
            vas.ln = ln;           % number of leaf nodes
  mlp.test_size = test_size;
         mlp.train_size = train_size;
@@ -32,7 +32,7 @@ for avg=1:10
      mlp.labels=labels;
         %% Vascular side training
         %     rng(rng_saver);
-        vas.energy_mat = [1,10:10:100,150:50:600];
+        vas.energy_mat = [1,10:10:100,100:100:1000];
         vas.trials = numel(vas.energy_mat);
         vas.emax = 1;
         vas.epoch = epoch;
@@ -71,10 +71,10 @@ for avg=1:10
             accuracy_recheck(i) = vas.accuracy;
         end
         
-        plot(vas.energy_mat, accuracy_recheck,'color',colorc(20*k,:));ylim([0 100]);hold on;
-        ylabel('Accuracy');
-        xlabel('Root energy');
-        title('Accuracy vs Root node energy Optimal training');
+%         plot(vas.energy_mat, accuracy_recheck,'color',colorc(20*k,:));ylim([0 100]);hold on;
+%         ylabel('Accuracy');
+%         xlabel('Root energy');
+%         title('Accuracy vs Root node energy Optimal training');
         acc1(k,:)=accuracy_recheck;
         
 %         cd C:\Users\Nagavarshini\Desktop\Newvascular\Vascular_Tree\Vascular_Tree\task_2\trials
@@ -83,13 +83,13 @@ cd C:\Users\Bhadra\Documents\GitHub\ANVN_FINAL\MNIST_TASK2_Sequential\Task2_data
          save(str,'savee1','saveb1','accuracy_recheck');
          cd C:\Users\Bhadra\Documents\GitHub\ANVN_FINAL\MNIST_TASK2_Sequential
     end
-     legend('k = 16','k = 256','k = 512')
+%      legend('k = 16','k = 256','k = 512')
     ACC = ACC + acc1;    
 end
 ACC=ACC./avg;
 figure;
 for k =1:numel(branching)
-    plot(vas.energy_mat, ACC(k,:),'color',colorc(20*k,:));ylim([0 100]);hold on;
+    plot(vas.energy_mat, ACC(k,:),'color',colorc(10*k,:));ylim([0 100]);hold on;
 end
 ylabel('Accuracy');
 xlabel('Root energy');
@@ -97,4 +97,4 @@ title('Accuracy vs Root node energy Optimal training');
 hold off;
 % legend('k = 16','k = 256','k = 512')
 Energy=vas.energy_mat;
-   save('Ln128_Task2_MNIST_data_K_Vary','Energy','ACC');
+%    save('Task2_MNIST_data_K_Vary','Energy','ACC');
