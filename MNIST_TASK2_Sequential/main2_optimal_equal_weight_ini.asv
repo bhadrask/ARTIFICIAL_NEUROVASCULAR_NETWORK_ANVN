@@ -9,7 +9,7 @@ clc;
 % rng_saver = rng();
 
 colorc = jet(65);
-branching =[2,32];%[16,64,128,256,512];
+branching =[16,64,128,256,512];
 ACC=0;
 for avg=1:30
     for k = 1:numel(branching)
@@ -31,14 +31,14 @@ load('F:\Github_team\ANVN_FINAL\MNIST_MLP_training\MNIST_mlp_Train_500_test_200_
      mlp.labels=labels;
         %% Vascular side training
         %     rng(rng_saver);
-        vas.energy_mat =[10:10:100,200:100:1000];
+        vas.energy_mat =[400:100:800];
         vas.trials = numel(vas.energy_mat);
         vas.emax = 1;
         vas.epoch = 8000;
         vas.save_every = 1;
         
         tree = define_tree(vas.ln, branching(k), vas.dim, vas.energy_in);
-        
+          tree = assign_equal_weights(tree);
         fprintf('Training the Vascular weights to accuracy\n')
         [vas,savee1,saveb1,saveacc] = vascular_training(vas, tree, opt.b1, branching(k),avg);
         
@@ -76,11 +76,11 @@ load('F:\Github_team\ANVN_FINAL\MNIST_MLP_training\MNIST_mlp_Train_500_test_200_
 %         title('Accuracy vs Root node energy Optimal training');
         acc1(k,:)=accuracy_recheck;
         
-%         cd C:\Users\Nagavarshini\Desktop\Newvascular\Vascular_Tree\Vascular_Tree\task_2\trials
-cd F:\Github_team\ANVN_FINAL\MNIST_TASK2_Sequential\Task2_data
-         str =  'rerun_k_' + string(branching(k)) + '_trial_' + string((avg)) +'.mat';
-         save(str,'savee1','saveb1','accuracy_recheck','saveacc');
-         cd F:\Github_team\ANVN_FINAL\MNIST_TASK2_Sequential
+% %         cd C:\Users\Nagavarshini\Desktop\Newvascular\Vascular_Tree\Vascular_Tree\task_2\trials
+% cd F:\Github_team\ANVN_FINAL\MNIST_TASK2_Sequential\Task2_data
+%          str =  'equal_ini_W' + string(branching(k)) + '_trial_' + string((avg)) +'.mat';
+%          save(str,'savee1','saveb1','accuracy_recheck','saveacc');
+%          cd F:\Github_team\ANVN_FINAL\MNIST_TASK2_Sequential
     end
 %      legend('k = 16','k = 256','k = 512')
     ACC = ACC + acc1;    
