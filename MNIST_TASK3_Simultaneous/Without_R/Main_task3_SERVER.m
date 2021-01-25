@@ -13,7 +13,7 @@ vas_ln = 512;%[500:25:700];%[16,64,256, 512,768,900,1024,2048];%,1024,2048];    
 vas_dim = 2 ;                                % dimension of the position coordinates
 % vas_energy_in = 100;                         % here we fix the input energy and then repeat this entiry study for
 vas_eta = 0.05;                              % Learning rate for vascular weights
-vas_energy_mat = [1,50,100:100:1000];%[1,10:10:100,150:50:600];%200:50:550];                   % [20 10 5];%[100 80 60 40 20 0];
+vas_energy_mat = [1,10:10:90,100:100:1000];%[1,10:10:100,150:50:600];%200:50:550];                   % [20 10 5];%[100 80 60 40 20 0];
 vas_trials = numel(vas_energy_mat);
 
 %% Define MLP requirements
@@ -30,13 +30,13 @@ mlp_train_size = 500;
 
 [mlp_train_images, mlp_train_labels, mlp_test_images, mlp_test_labels] = initialize_mlp(mlp_test_size, mlp_train_size);
 % kmat =[ 16];
-kmat=[16,256,512];
+kmat=[2,3,4,6,8,32,512];
 % rng(rng_set);
 %% Start training both Neural and Vascular
 % wallowable = 0.01: 0.05: 0.5;
 % parfor i = 1:size(vas_energy_mat,2)
 ln_idx=1;
-parfor trials= 1:10%:numel(kmat)
+parfor trials= 1:3%:numel(kmat)
     
     fprintf('Branching: %d \n', trials);
     for idx = 1:size(kmat, 2)

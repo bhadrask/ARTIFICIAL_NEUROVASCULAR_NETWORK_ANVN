@@ -9,11 +9,11 @@ clc;
 % rng_saver = rng();
 
 colorc = jet(65);
-branching =[2,32];%[16,64,128,256,512];
+branching =[16,64,256];%[2,3,4,6,8,32,512];
 ACC=0;
-for avg=1:30
+for avg=1:10
     for k = 1:numel(branching)
-        vas.ln = 512;           % number of leaf nodes
+       
         vas.dim = 2 ;          % dimension of the position coordinates
         vas.energy_in = 0;     % initialising this to 0 to make energy supply variable inside epochs
         vas.eta = 0.1;          % learning rule parameter for vascular side
@@ -21,26 +21,27 @@ for avg=1:30
      
         
         str = "k" + '_'+ string(branching(k)) + '.mat';
-load('F:\Github_team\ANVN_FINAL\MNIST_MLP_training\MNIST_mlp_Train_500_test_200_epochs_20000.mat')
-           mlp.test_size = test_size;
+ load('C:\Users\Bhadra\Documents\GitHub\ANVN_FINAL\MNIST_MLP_training\MNIST_mlp_Train_500_test_200_epochs_20000.mat')
+           vas.ln = ln;           % number of leaf nodes
+ mlp.test_size = test_size;
         mlp.train_size = train_size;
 % [test.test_images, test.test_labels, mlp.X1, mlp.labels]=load_mnist(mlp.test_size);
-          test.test_images=test_images; 
+     test.test_images=test_images; 
      test.test_labels=test_labels;
      mlp.X1=images;
      mlp.labels=labels;
         %% Vascular side training
         %     rng(rng_saver);
-        vas.energy_mat =[10:10:100,200:100:1000];
+        vas.energy_mat = [1,10:10:100,100:100:1000];
         vas.trials = numel(vas.energy_mat);
         vas.emax = 1;
-        vas.epoch = 8000;
+        vas.epoch = epoch;
         vas.save_every = 1;
         
         tree = define_tree(vas.ln, branching(k), vas.dim, vas.energy_in);
         
         fprintf('Training the Vascular weights to accuracy\n')
-        [vas,savee1,saveb1,saveacc] = vascular_training(vas, tree, opt.b1, branching(k),avg);
+        [vas,savee1,saveb1] = vascular_training(vas, tree, opt.b1, branching(k),avg);
         
         %% Accuracy checking part
         
@@ -77,10 +78,10 @@ load('F:\Github_team\ANVN_FINAL\MNIST_MLP_training\MNIST_mlp_Train_500_test_200_
         acc1(k,:)=accuracy_recheck;
         
 %         cd C:\Users\Nagavarshini\Desktop\Newvascular\Vascular_Tree\Vascular_Tree\task_2\trials
-cd F:\Github_team\ANVN_FINAL\MNIST_TASK2_Sequential\Task2_data
-         str =  'rerun_k_' + string(branching(k)) + '_trial_' + string((avg)) +'.mat';
-         save(str,'savee1','saveb1','accuracy_recheck','saveacc');
-         cd F:\Github_team\ANVN_FINAL\MNIST_TASK2_Sequential
+cd C:\Users\Bhadra\Documents\GitHub\ANVN_FINAL\MNIST_TASK2_Sequential\Task2_data_server
+         str =  'opti_k_' + string(branching(k)) + '_trial_' + string((avg)) +'.mat';
+         save(str,'savee1','saveb1','accuracy_recheck');
+         cd C:\Users\Bhadra\Documents\GitHub\ANVN_FINAL\MNIST_TASK2_Sequential
     end
 %      legend('k = 16','k = 256','k = 512')
     ACC = ACC + acc1;    
@@ -88,7 +89,7 @@ end
 ACC=ACC./avg;
 figure;
 for k =1:numel(branching)
-    plot(vas.energy_mat, ACC(k,:),'color',colorc(20*k,:));ylim([0 100]);hold on;
+    plot(vas.energy_mat, ACC(k,:),'color',colorc(10*k,:));ylim([0 100]);hold on;
 end
 ylabel('Accuracy');
 xlabel('Root energy');

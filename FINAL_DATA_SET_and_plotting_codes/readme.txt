@@ -1,0 +1,1 @@
+eff= acc-acc0/energy is coded in the comparison code in this folder in my laptop
