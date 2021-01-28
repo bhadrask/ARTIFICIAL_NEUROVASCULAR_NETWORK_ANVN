@@ -1,4 +1,4 @@
-function [vas,savee1,saveb1] = vascular_training(vas, tree, btarget,branching,l)
+function [vas,savee1,saveb1,acc] = vascular_training(vas, tree, btarget,branching,l)
 for i = 1:vas.trials
     vas.tree(i) = tree;
     vas.energy_in = vas.energy_mat(i);
@@ -15,8 +15,16 @@ for i = 1:vas.trials
         if epoch == vas.epoch
             savee1(i,:) = vas.tree(i).Energy(vas.tree(i).leaf_idx);
         end
-        
+         
         b1 = calculate_bias(vas.tree(i));
+        if rem(epoch,500)==0 || epoch==1
+            if epoch ==1
+                acc(1)=find_acc(b1,i);
+            else
+        acc((epoch/500)+1)=find_acc(b1,i);
+            end
+        epoch
+        end
 %         b1=calculate_bias_upper_limit_adjusted(vas.tree(i),btarget);
         if epoch == vas.epoch
             saveb1(i,:) = b1;
@@ -28,7 +36,7 @@ for i = 1:vas.trials
         %         adam.vb1(:,1) = adamv;
         del_energy = calculate_delta_energy(vas.tree(i), db1);
         st_dE(1,epoch)=sqrt(sum((del_energy).^2));
-        vas.eta =get_exp_eta_step(epoch, vas.epoch, 0.1, 0.001, 2000);
+        vas.eta =get_exp_eta_step(epoch, vas.epoch, 0.2, 0.12, 10000);
         
         [vas.tree(i),dW] = vascular_weight_update(vas.tree(i), vas.tree(i).leaf_idx, del_energy, vas.eta);
         st_dW(1,epoch)=dW;

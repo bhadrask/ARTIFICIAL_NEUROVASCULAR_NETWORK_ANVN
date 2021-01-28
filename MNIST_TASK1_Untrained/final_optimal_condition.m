@@ -1,23 +1,23 @@
-clc;clear all;close all;
+ clc;clear all;close all;
           % number of leaf nodes
 % vas.k = 3;             % order at each level
 vas.dim = 2 ;          % dimension of the position coordinates
 vas.energy_in = 0;     % initialising this to 0 to make energy supply variable inside epochs
 
-vas.energy_mat = [1,10:10:100,150:50:600];
+vas.energy_mat = [10:10:100,200:100:600];
 vas.leaf_mean = 1;
 
 vas.trials = numel(vas.energy_mat);
 
-vas.no_of_attempts = 10;
+vas.no_of_attempts = 1;
 accuracy_recheck = zeros(vas.trials, vas.no_of_attempts);
 colorc = jet(65);
-branching = [16,256,512];%[2,3,4,5,6,15,16,17,50,100,200,255,256];
+branching =[2,3,4,6,8,32,512];% [16,256,512];%[2,3,4,5,6,15,16,17,50,100,200,255,256];
 ACC=0;
 for attempt = 1:vas.no_of_attempts
 %     figure;
     for k = 1:numel(branching)
-        load('C:\Users\Bhadra\Documents\GitHub\ANVN_FINAL\MNIST_MLP_training\LN_128_MNIST_mlp_Train_500_test_200_epochs_20000.mat')
+        load('F:\Github_team\ANVN_FINAL\MNIST_MLP_training\MNIST_mlp_Train_500_test_200_epochs_20000.mat')
 %                  load('D:\github_desktop\Vascular_Tree\task_1\ln_100.mat')
                  opt.W1=W1;
                  opt.W2=W2;
@@ -78,21 +78,31 @@ Energy=vas.energy_mat;
 ACC=ACC./vas.no_of_attempts;
 
 for k =1:numel(branching)
-  figure(1);  plot(vas.energy_mat, ACC(k,:),'color',colorc(20*k,:));ylim([0 100]);
+  figure(1);  plot(vas.energy_mat, ACC(k,:),'color',colorc(5*k,:));ylim([0 100]);
             title(['Accuracy check vs Root node energy Optimal training'])
         ylabel('Accuracy')
         xlabel('Root node energy');
 hold on;
-end
-legend('k = 16','k = 256','k = 512')
-ACC16=ACC(1,:);
-efficiency=ACC16./Energy;
-efficiency=efficiency./max(efficiency);
-figure();
+efficiency(k,:)=ACC(k,:)./Energy;
+efficiency(k,:)=efficiency(k,:)./max(efficiency(k,:));
+figure(2);
        yyaxis left
-    plot(Energy,ACC16/100); xlabel('Energy at Root Node');
+       ylim([0,1])
+    plot(Energy,ACC(k,:)/100); xlabel('Energy at Root Node');
     ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex')
     hold on;
        yyaxis right
-    plot(Energy,efficiency);ylabel('Normalized Energy Efficiency')
-   save('task1_MNIST_data_final_2021.mat','accuracy_recheck','Energy','ACC','efficiency');
+    plot(Energy,efficiency(k,:));ylabel('Normalized Energy Efficiency');hold on;
+end
+legend('k=2','k=3','k=4','k=6','k=8','k=32','k=512');
+% ACC16=ACC(1,:);
+% efficiency=ACC16./Energy;
+% efficiency=efficiency./max(efficiency);
+% figure(2);
+%        yyaxis left
+%     plot(Energy,ACC16/100); xlabel('Energy at Root Node');
+%     ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex')
+%     hold on;
+%        yyaxis right
+%     plot(Energy,efficiency);ylabel('Normalized Energy Efficiency')
+    save('task1_MNIST_data_final_2021.mat','accuracy_recheck','Energy','ACC','efficiency');
