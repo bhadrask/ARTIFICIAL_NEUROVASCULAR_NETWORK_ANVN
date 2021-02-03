@@ -26,16 +26,15 @@ end
         plot(en,ACC); hold on;
         legend('2','3','4','6','8','32','512');
         figure(2);
-        yyaxis left
+        yyaxis left;ylim([0,1]);
         plot(en,ACC/100); xlabel('Energy at Root Node');
         ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex')
         hold on;
-        yyaxis right
+        yyaxis right;ylim([0,1]);
         plot(en,efficiency);ylabel('Normalized Energy Efficiency');hold on;
         
         legend('2','3','4','6','8','32','512');
-%             save('task3_noR_MNIST_data_final_2021.mat','en','ACC','efficiency');
-evec=en;
+            evec=en;
  for j=K
 chosenk=find(K==j);
 for i=1:tr
@@ -59,6 +58,14 @@ figure();
        yyaxis right;ylim([0,1]);
     plot(evec,efficiency(chosenk,:)); hold on;
         errorbar(evec,mean_eff,std_eff,opt{:});
-    ylabel('Normalized Energy Efficiency');
+    ylabel('Energy Efficiency');
     title(['Branching=',num2str(j)]);
-end
+ end
+%   save('new_eff_task3_noR_MNIST_data_final_2021.mat','en','ACC','efficiency','Acc_trials','Eff_trials');
+
+%% Paired t test
+% for i=1:numel(K)
+% for j=1:numel(K)
+% [h(i,j),p(i,j)]=ttest2(efficiency(i,:),efficiency(j,:));
+% end
+% end

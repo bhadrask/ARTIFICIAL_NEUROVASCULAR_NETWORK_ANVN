@@ -8,9 +8,10 @@ loc_comp=find(branching==chosen_k);
 
 colorc = jet(100);
 fr=floor(100/numel(branching));
+loc=1:numel(vas.energy_mat);
 %% TASK 1 : UNTRAINED
 load('task1_MNIST_data_final_2021.mat')
-loc=1:numel(vas.energy_mat);
+
  EFFnew=zeros(size(efficiency(:,loc)));
 
       
@@ -30,7 +31,7 @@ figure(2);
     ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex')
     hold on;
        yyaxis right; ylim([0,1])
-    plot(Energy(loc),EFFnew(k,loc));ylabel('Normalized Energy Efficiency');
+    plot(Energy(loc),EFFnew(k,loc));ylabel('Energy Efficiency');
      
     hold on;
 end
@@ -43,13 +44,15 @@ figure(10);
     ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex')
     hold on;
        yyaxis right
-    plot(Energy(loc),EFFnew(loc_comp,loc));ylabel('Normalized Energy Efficiency');
+       ylim([0,1])
+    plot(Energy(loc),EFFnew(loc_comp,loc));ylabel('Energy Efficiency');
       title('Accuracy and Efficiency vs Root energy: Untrained')
     hold on;
+ 
 %% Sequential Training
 
 
-load('task2_MNIST_data_final_2021.mat');
+load('new_eff_task2_MNIST_data_final_2021.mat');
 EFFnew=zeros(size(efficiency(:,loc)));
 for k =1:numel(branching)
      EFFnew(k,:)=(Acc(k,loc)-Acc(1))./vas.energy_mat(loc);
@@ -65,27 +68,51 @@ for k =1:numel(branching)
     ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex')
     hold on;
        yyaxis right;  ylim([0,1])
-    plot(evec,EFFnew(k,:));ylabel('Normalized Energy Efficiency');
+    plot(evec,efficiency(k,:));ylabel('Energy Efficiency');
     title('Accuracy and Efficiency vs Root energy: Sequential Training');
     hold on;
     disp(['sequential k=',num2str(branching(k)),', maxeff=',num2str(max(EFFnew(k,:))),', at root E=',num2str(Energy(find(EFFnew(k,:)==max(EFFnew(k,:)))))])
 end
 figure(3);legend('k=2','k=3','k=4','k=6','k=8','k=32','k=512');
+figure(4);legend('k=2','k=3','k=4','k=6','k=8','k=32','k=512');
+tr1=1:size(Acc_trials,2);
+chosenk=find(branching==chosen_k);
+for i=1:numel(tr1)
+    acc_chosen(i,:)=Acc_trials{chosenk,i}/100;
+    eff_chosen(i,:)=Eff_trials{chosenk,i};
+end
+
+mean_acc=mean(acc_chosen,1);
+mean_eff=mean(eff_chosen,1);
+std_acc=std(acc_chosen,1);
+std_eff=std(eff_chosen,1);
+opt = {'k','Linew',2,'LineS','none'};
+
 
 figure(10);
-
+mean_master(1,:)=mean_acc(loc);
+std_master(1,:)=std_acc(loc);
  yyaxis left
        ylim([0,1])
-    plot(Energy(loc),Acc(loc_comp,loc)/100); xlabel('Energy at Root Node');
+   
+
+    plot(Energy(loc),Acc(loc_comp,loc)/100); 
+      xlabel('Energy at Root Node');
     ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex')
     hold on;
        yyaxis right
-    plot(Energy(loc),EFFnew(loc_comp,loc));ylabel('Normalized Energy Efficiency');
+       ylim([0,1])
+    plot(Energy(loc),efficiency(loc_comp,loc));ylabel('Energy Efficiency'); 
+%      hold on; errorbar(Energy(loc),mean_eff(loc),std_eff(loc),opt{:});
       
     hold on;
+clearvars -except vas branching chosen_k loc_comp colorc fr loc mean_master std_master;
+
 %% Task3 without R
-load('task3_noR_MNIST_data_final_2021.mat');
+load('new_eff_task3_noR_MNIST_data_final_2021.mat');
 EFFnew=zeros(size(efficiency(:,loc)));
+evec=en;
+Energy=en;
 for k =1:numel(branching)
      EFFnew(k,:)=(ACC(k,loc)-ACC(1))./vas.energy_mat(loc);
     EFFnew(EFFnew<0)=0;
@@ -96,26 +123,56 @@ for k =1:numel(branching)
         figure(6);
        yyaxis left
        ylim([0,1])
-    plot(evec,ACC(k,:)/100); xlabel('Energy at Root Node');
+    plot(evec,ACC(k,:)/100);
+     
+      xlabel('Energy at Root Node');
     ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex')
     hold on;
        yyaxis right; ylim([0,1]);
-    plot(evec,EFFnew(k,:));ylabel('Normalized Energy Efficiency');
+    plot(evec,efficiency(k,:));ylabel('Energy Efficiency');
     title('Accuracy and Efficiency vs Root energy: Simultaneous Training');
     hold on;
       disp(['k=',num2str(branching(k)),', maxeff=',num2str(max(EFFnew(k,:))),', at root E=',num2str(Energy(find(EFFnew(k,:)==max(EFFnew(k,:)))))])
 
 end
+figure(5);legend('k=2','k=3','k=4','k=6','k=8','k=32','k=512');
+figure(6);legend('k=2','k=3','k=4','k=6','k=8','k=32','k=512');
+tr1=1:size(Acc_trials,2);
+chosenk=find(branching==chosen_k);
+for i=1:numel(tr1)
+    acc_chosen(i,:)=Acc_trials{chosenk,i}/100;
+    eff_chosen(i,:)=Eff_trials{chosenk,i};
+end
+
+mean_acc=mean(acc_chosen,1);
+mean_eff=mean(eff_chosen,1);
+std_acc=std(acc_chosen,1);
+std_eff=std(eff_chosen,1);
+opt = {'k','Linew',2,'LineS','none'};
+mean_master(2,:)=mean_acc(loc);
+std_master(2,:)=std_acc(loc);
 
 figure(10);
 
  yyaxis left
        ylim([0,1])
-    plot(Energy(loc),ACC(loc_comp,loc)/100); xlabel('Energy at Root Node');
+    plot(Energy(loc),ACC(loc_comp,loc)/100); 
+     
+%     ; 
+      xlabel('Energy at Root Node');
     ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex')
     hold on;
        yyaxis right
-    plot(Energy(loc),EFFnew(loc_comp,loc));ylabel('Normalized Energy Efficiency');
+       ylim([0,1])
+    plot(Energy(loc),efficiency(loc_comp,loc));ylabel('Energy Efficiency');
+%     hold on;errorbar(Energy(loc),mean_eff(loc),std_eff(loc),opt{:});
       title('Accuracy and Efficiency vs Root energy: comparison of all 3 regimes')
     hold on;
+
+      
     legend('Untrained','sequential','simultaneous');
+    
+    figure(10);
+     errorbar(Energy(loc),mean_master(1,loc),std_master(1,loc),opt{:});
+     hold on;
+     errorbar(Energy(loc),mean_master(2,loc),std_master(2,loc),opt{:}); 

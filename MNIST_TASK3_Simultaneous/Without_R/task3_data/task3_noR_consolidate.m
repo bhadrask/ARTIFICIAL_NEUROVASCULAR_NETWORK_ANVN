@@ -26,11 +26,11 @@ end
         plot(en,ACC); hold on;
         legend('2','3','4','6','8','32','512');
         figure(2);
-        yyaxis left
+        yyaxis left;ylim([0,1]);
         plot(en,ACC/100); xlabel('Energy at Root Node');
         ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex')
         hold on;
-        yyaxis right
+        yyaxis right;ylim([0,1]);
         plot(en,efficiency);ylabel('Normalized Energy Efficiency');hold on;
         
         legend('2','3','4','6','8','32','512');
