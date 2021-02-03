@@ -1,38 +1,36 @@
 clear ; close all; clc;
 kk=32;%[2,3,4,6,32,512];%3;%[16,256,512];
 legendTitle = cell(1,numel(kk));
-load('F:\Github_team\ANVN_FINAL\MNIST_MLP_training\MNIST_mlp_Train_500_test_200_epochs_20000.mat')
+load('D:\github_desktop\ANVN_FINAL\MNIST_MLP_training\MNIST_mlp_Train_500_test_200_epochs_20000.mat')
 for i=3:3
     for br=1:numel(kk)
-    str = 'F:\Github_team\ANVN_FINAL\FINAL_DATA_SET_and_plotting_codes\DATASET\TASK2_sequential\opti_k_' + string(kk(br)) + '_trial_'+  string(i)+ '.mat';
+    str = 'D:\github_desktop\ANVN_FINAL\FINAL_DATA_SET_and_plotting_codes\DATASET\TASK2_sequential\opti_k_' + string(kk(br)) + '_trial_'+  string(i)+ '.mat';
     load(str)
     Emlp=1-b1;
     Eavail=1-saveb1;
     rooten=sum(savee1,2);
     loc=find(abs(rooten-500)<1e-3);%numel(rooten);%
     deficiency=mean(abs(Emlp-Eavail'));
-%     efficiency=
+     efficiency=(accuracy_recheck-accuracy_recheck(2))./rooten;
     yyaxis left
-    hold on ;
-    figure(i);plot(rooten(1:loc),deficiency(1:loc),'LineWidth',3);
-    xlabel('Root energy'); ylabel('Energy Deficiency'); ylim([0,1]);hold on;
-    
-    hold on ;
+
+    figure(1);plot(rooten(2:loc),deficiency(2:loc),'LineWidth',3);
+    xlabel('Root energy'); ylabel('Energy Deficit'); ylim([0,1]);hold on;
+     plot(rooten(2:loc),efficiency(2:loc),'LineWidth',3);
+     hold on ;
     yyaxis right
-    plot(rooten(1:loc),accuracy_recheck(1:loc) ,'LineWidth',3); 
-    xlabel('Root energy'); ylabel('Test Accuracy'); ylim([0,100]);title('Root energy Vs Energy deficiency and Accuracy')
+    plot(rooten(2:loc),accuracy_recheck(2:loc) ,'LineWidth',3); 
+    xlabel('Root energy'); ylabel('Test Accuracy'); ylim([0,100]);title('Root energy Vs Energy deficit and Accuracy')
     hold on;
-     legendTitle{1,br} = strcat('k= ',num2str(kk(br)));
-      legend(legendTitle{1,1:br}); hold off;
-%       figure(3)
-%       xl=[1,500:500:6000];
-% plot(xl,saveacc)
+%      legendTitle{1,br} = strcat('k= ',num2str(kk(br)));
+%       legend(legendTitle{1,1:br}); hold off;
+
     end
    
 end
-figure(1);
-
-legend(legendTitle);
+% figure(1);
+% 
+% legend(legendTitle);
 hold off;
 
 % for i=1:1

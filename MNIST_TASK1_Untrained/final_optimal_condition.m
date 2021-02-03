@@ -4,7 +4,7 @@
 vas.dim = 2 ;          % dimension of the position coordinates
 vas.energy_in = 0;     % initialising this to 0 to make energy supply variable inside epochs
 
-vas.energy_mat = [10:10:100,200:100:600];
+vas.energy_mat = [10:10:100,200:100:500];
 vas.leaf_mean = 1;
 
 vas.trials = numel(vas.energy_mat);
@@ -12,12 +12,12 @@ vas.trials = numel(vas.energy_mat);
 vas.no_of_attempts = 1;
 accuracy_recheck = zeros(vas.trials, vas.no_of_attempts);
 colorc = jet(65);
-branching =[2,3,4,6,8,32,512];% [16,256,512];%[2,3,4,5,6,15,16,17,50,100,200,255,256];
+branching =32;%[2,3,4,6,8,32,512];% [16,256,512];%[2,3,4,5,6,15,16,17,50,100,200,255,256];
 ACC=0;
 for attempt = 1:vas.no_of_attempts
 %     figure;
     for k = 1:numel(branching)
-        load('F:\Github_team\ANVN_FINAL\MNIST_MLP_training\MNIST_mlp_Train_500_test_200_epochs_20000.mat')
+        load('D:\github_desktop\ANVN_FINAL\\MNIST_MLP_training\MNIST_mlp_Train_500_test_200_epochs_20000.mat')
 %                  load('D:\github_desktop\Vascular_Tree\task_1\ln_100.mat')
                  opt.W1=W1;
                  opt.W2=W2;
@@ -47,6 +47,11 @@ for attempt = 1:vas.no_of_attempts
             vas.tree.Energy = [vas.energy_in; zeros(vas.tree.Ntot-1,1)];
             vas.tree = energy_flow_equal(vas.tree);
             vas.b1(:,i) = linear_energy_bias(vas.tree.Energy(vas.tree.Ntot-vas.ln+1:end), vas.leaf_mean, opt.b1);
+             Emlp=1-vas.b1(:,i);
+             Eavail=1-opt.b1;
+             deficiency(k,i)=mean(abs(Emlp-Eavail));
+            
+            
             
             vas.z1 = opt.W1*test_images - repmat(vas.b1(:,i),1,size(test_images,2));
             mlp.c1 = 5;mlp.c2 =0;
@@ -83,8 +88,9 @@ for k =1:numel(branching)
         ylabel('Accuracy')
         xlabel('Root node energy');
 hold on;
-efficiency(k,:)=ACC(k,:)./Energy;
-efficiency(k,:)=efficiency(k,:)./max(efficiency(k,:));
+efficiency(k,:)=(ACC(k,:)-ACC(k,1))./Energy;
+efficiency(efficiency<0)=0;
+% efficiency(k,:)=efficiency(k,:)./max(efficiency(k,:));
 figure(2);
        yyaxis left
        ylim([0,1])
@@ -92,17 +98,19 @@ figure(2);
     ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex')
     hold on;
        yyaxis right
+         ylim([0,1])
     plot(Energy,efficiency(k,:));ylabel('Normalized Energy Efficiency');hold on;
+    
+    figure(3);
+       yyaxis left
+       ylim([0,1])
+    plot(Energy,deficiency(k,:));ylabel('Deficit');hold on;
+    hold on;
+       yyaxis right
+         ylim([0,100])
+          plot(Energy,ACC(k,:)); xlabel('Energy at Root Node');
+    ylabel('Test Accuracy')
+   
 end
-legend('k=2','k=3','k=4','k=6','k=8','k=32','k=512');
-% ACC16=ACC(1,:);
-% efficiency=ACC16./Energy;
-% efficiency=efficiency./max(efficiency);
-% figure(2);
-%        yyaxis left
-%     plot(Energy,ACC16/100); xlabel('Energy at Root Node');
-%     ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex')
-%     hold on;
-%        yyaxis right
-%     plot(Energy,efficiency);ylabel('Normalized Energy Efficiency')
-    save('task1_MNIST_data_final_2021.mat','accuracy_recheck','Energy','ACC','efficiency');
+% legend('k=2','k=3','k=4','k=6','k=8','k=32','k=512');
+%   save('task1_MNIST_data_final_2021.mat','accuracy_recheck','Energy','ACC','efficiency');

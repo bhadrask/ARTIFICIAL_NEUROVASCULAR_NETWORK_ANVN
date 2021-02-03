@@ -1,6 +1,6 @@
 %
 clear; clc;close all;
-en=[10:10:100,200:100:500];
+en=[1,10:10:100,200:100:500];
 trial=1:3;
 K=[2,3,4,6,8,32,512];
 ACC=zeros(numel(K),numel(en));
@@ -32,7 +32,7 @@ end
         plot(en,efficiency);ylabel('Normalized Energy Efficiency');hold on;
         
         legend('2','3','4','6','8','32','512');
-            save('task3_noR_MNIST_data_final_2021.mat','en','ACC','efficiency');
+%             save('task3_noR_MNIST_data_final_2021.mat','en','ACC','efficiency');
         %% section2
         
         % k=[2,3,4,6,8,32,512];
