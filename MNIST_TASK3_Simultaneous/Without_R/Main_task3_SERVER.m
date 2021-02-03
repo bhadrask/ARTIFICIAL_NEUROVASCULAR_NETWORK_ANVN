@@ -30,7 +30,7 @@ mlp_train_size = 500;
 
 [mlp_train_images, mlp_train_labels, mlp_test_images, mlp_test_labels] = initialize_mlp(mlp_test_size, mlp_train_size);
 % kmat =[ 16];
-kmat=[2,3,4,6,8,32,512];
+kmat=[16,64,256];
 % rng(rng_set);
 %% Start training both Neural and Vascular
 % wallowable = 0.01: 0.05: 0.5;

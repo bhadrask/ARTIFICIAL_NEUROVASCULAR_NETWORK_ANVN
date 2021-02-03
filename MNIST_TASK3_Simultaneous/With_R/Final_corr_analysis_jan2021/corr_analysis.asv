@@ -56,13 +56,13 @@ for jj=1:numel(vas_ln_mat)
     end
     figure(1);
     fig=figure(1);
-    members=[16,32,64,100,500];
-    if ismember(vas_ln,members)
-    subplot(numel(members),1,cnt);
+    members=[16,32,64,100];
+    if ismember(vas_ln,member)
+    subplot(4,1,cnt);
     cnt=cnt+1;
     scatter(Econsum,error_contri,'filled');
 %     stem(END_energy);
-     title(['No: of Hidden Neurons= ',num2str(members(cnt-1))]);
+     title(['No: of Hidden Neurons= ',num2str()])
     end
 end
 han=axes(fig,'visible','off'); 
