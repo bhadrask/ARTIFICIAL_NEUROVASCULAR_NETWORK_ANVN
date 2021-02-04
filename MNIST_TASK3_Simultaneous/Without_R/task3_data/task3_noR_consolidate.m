@@ -1,14 +1,14 @@
 %
 clear; clc;close all;
-en=[10:10:100,200:100:500];
-trial=1:3;
-K=[2,3,4,6,8,32,512];
+en=[10:10:100,200:100:1000];
+trial=1:1;
+K=[16,64,256];%[2,3,4,6,8,32,512];
 ACC=zeros(numel(K),numel(en));
 efficiency=zeros(numel(K),numel(en));
 for tr=1:numel(trial)
     for k=1:numel(K)
         for i=1:numel(en)
-            str =  'k_'+string(K(k))+'_energy_' + string(en(i)) +'_Trial_'+string(tr)+'.mat';
+            str =  'LN64k_'+string(K(k))+'_energy_' + string(en(i)) +'_Trial_'+string(tr)+'.mat';
             load(str);
             acc(i)=mlp_test_success(end);
         end
