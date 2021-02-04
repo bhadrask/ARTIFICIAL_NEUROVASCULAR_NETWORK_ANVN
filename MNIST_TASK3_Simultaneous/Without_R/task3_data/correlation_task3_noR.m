@@ -85,8 +85,9 @@ end
 
 NNew=mean(new_corr_coefficient,1);
 
-figure;(plot(en,NNew));ylim([0,1]);
+figure;
 yyaxis left
+(plot(en,NNew));ylim([0,1]);
 title([{'Correlation between energy consumption and'},{ 'error contribution across the input energy'}]);
 xlabel('Input Energy'); ylabel ('Correlation coefficient');
 yyaxis right
