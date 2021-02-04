@@ -15,7 +15,7 @@ for tr=1:numel(trial)
         for ii=1:numel(en)
             str =  'k_'+string(K(k))+'_energy_' + string(en(ii)) +'_Trial_'+string(tr)+'.mat';
             load(str);
-            END_energy=(1-mlp_b1);%tree_Energy_save(numel(tree_Energy_save)-vas_ln+1:end);
+            END_energy=tree_Energy_save(numel(tree_Energy_save)-vas_ln+1:end);
             for i=1:vas_ln
                 t2 = sigmf(mlp_W1*mlp_test_images - repmat(mlp_b1,1, mlp_test_size), [mlp_c1, 0]);
                 t2o=t2;
@@ -66,7 +66,7 @@ for tr=1:numel(trial)
 yyaxis left
 
 plot(en,new_corr_coefficient(k,:));ylim([0,1]); hold on;
-title([{'Correlation between energy consumption and'},{ 'error contribution across the hidden number'}]);
+title([{'Correlation between energy consumption and'},{ 'error contribution across the input energy'}]);
 xlabel('Input Energy'); ylabel ('Correlation coefficient');
 yyaxis right
 
@@ -84,9 +84,10 @@ end
 
 
 NNew=mean(new_corr_coefficient,1);
-yyaxis left
+
 figure;(plot(en,NNew));ylim([0,1]);
-title([{'Correlation between energy consumption and'},{ 'error contribution across the hidden number'}]);
+yyaxis left
+title([{'Correlation between energy consumption and'},{ 'error contribution across the input energy'}]);
 xlabel('Input Energy'); ylabel ('Correlation coefficient');
 yyaxis right
 
@@ -99,7 +100,7 @@ effi=100*(SUCC-SUCC(:,1))./en;
 figure;
 yyaxis left
 (plot(en,NNew));ylim([0,1]);
-title([{'Correlation between energy consumption and'},{ 'error contribution across the hidden number'}]);
+title([{'Correlation between energy consumption and'},{ 'error contribution across the input energy'}]);
 xlabel('Input Energy'); ylabel ('Correlation coefficient');
 yyaxis right
 plot(en,mean(effi,1));
