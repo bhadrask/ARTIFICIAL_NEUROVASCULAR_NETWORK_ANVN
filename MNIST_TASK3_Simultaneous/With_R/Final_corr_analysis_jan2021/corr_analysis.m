@@ -5,9 +5,9 @@ cnt=1;
 load('mlp_test_labels.mat');
 load('mlp_test_images.mat')
 mlp_test_size=numel(mlp_test_labels);
-wallowable_fraction = 1;%0.2:0.2:1;
+wallowable_fraction = 0.4:0.2:1.8;
 
-vas_ln_mat =[10:2:32,42,52,64,72,80,96,100:50:500];%[16,24,32,42,52,64,72,80,96,100:50:500];%[50:25:675];%[16,24,32,42,52,64,72,80,96,100:50:1000];%[16,32,64,100,300,500];%[16,24,32,42,52,64,72,80,96,100:25:500];%%[20:4:56,64,72,80,96,100:25:500];%[64,100:25:900];%[64,100:100:1000];%[32,50:50:1000];%[16,256,512,768,1024,2048];
+vas_ln_mat =[16,24,32,42,52,64,72,80,96,100:50:500];%[50:25:675];%[16,24,32,42,52,64,72,80,96,100:50:1000];%[16,32,64,100,300,500];%[16,24,32,42,52,64,72,80,96,100:25:500];%%[20:4:56,64,72,80,96,100:25:500];%[64,100:25:900];%[64,100:100:1000];%[32,50:50:1000];%[16,256,512,768,1024,2048];
 for jj=1:numel(vas_ln_mat)
     wallowable = (wallowable_fraction.*vas_ln_mat(jj))./5000;
     for ii=1:numel(wallowable)
@@ -27,20 +27,25 @@ for jj=1:numel(vas_ln_mat)
             
             [~, tidx] = max(t3);
               [~, tidxo] = max(t3o);
-              ydesired=zeros(size(t3,1),1);
-              ydesired(mlp_test_labels + 1)=1;
+              ydesired=zeros(size(t3));
+              
+
+              for pq=1:mlp_test_size
+                ydesired(mlp_test_labels(pq) + 1,pq)=1;
+              end
               RMSE_full_N(i)=mean(rms((ydesired-t3o),1));
               RMSE_removed_one_N(i)=mean(rms((ydesired-t3),1));
              
-%             success(i) = sum(tidx' == mlp_test_labels + 1)/mlp_test_size;
-%             successo(i) = sum(tidxo' == mlp_test_labels + 1)/mlp_test_size;
+            success(i) = sum(tidx' == mlp_test_labels + 1)/mlp_test_size;
+            successo(i) = sum(tidxo' == mlp_test_labels + 1)/mlp_test_size;
             Econsum(i)=END_energy(i);
 %             mm(i)=max(END_energy);
-%             ERR(i)=1-success(i);
+            ERR(i)= successo(i)-success(i);
             
         end
         error_contri=RMSE_removed_one_N-RMSE_full_N;
-       
+        succ(jj,ii)=mean(successo);
+        Esave(jj,ii)=sum(END_energy);
         newdd=corrcoef(error_contri,Econsum);
 %         dd=corrcoef(ERR,Econsum);
 %          if isnan(dd(1,2))
@@ -54,32 +59,47 @@ for jj=1:numel(vas_ln_mat)
          new_corr_coefficient(jj,ii)=newdd(1,2);
        
     end
-    figure(1);
-    fig=figure(1);
-    members=[16,32,64,100,500];
-    if ismember(vas_ln,members)
-    subplot(numel(members),1,cnt);
-    cnt=cnt+1;
-    scatter(Econsum,error_contri,'filled');
-%     stem(END_energy);
-     title(['No: of Hidden Neurons= ',num2str(members(cnt-1))]);
-    end
+%     figure(1);
+%     fig=figure(1);
+%     members=[16,32,64,100,500];
+%     if ismember(vas_ln,members)
+%     subplot(numel(members),1,cnt);
+%     cnt=cnt+1;
+%     scatter(Econsum,error_contri,'filled');
+% %     stem(END_energy);
+%      title(['No: of Hidden Neurons= ',num2str(members(cnt-1))]);
+%     end
 end
-han=axes(fig,'visible','off'); 
-han.Title.Visible='on';
-han.XLabel.Visible='on';
-han.YLabel.Visible='on';
-ylabel(han,'Delta RMSE by neuron j');
-     xlabel(han,'Energy Consumed by the neuron j')
-% ylabel(han,'Energy Consumed at steady state');
-% xlabel(han,'Neurons');
-% title(han,'Energy consumed by each neuron in a network');
-% figure(2);
-% plot(vas_ln_mat,corr_coefficient);hold on;
-% plot(vas_ln_mat,error1);ylim([-0.1,1]);title('Correlation between energy consumption and error contribution');
-% xlabel('No. of Hidden Neurons'); ylabel ('Correlation coefficient and Test Success')
+% han=axes(fig,'visible','off'); 
+% han.Title.Visible='on';
+% han.XLabel.Visible='on';
+% han.YLabel.Visible='on';
+% ylabel(han,'Delta RMSE by neuron j');
+%      xlabel(han,'Energy Consumed by the neuron j')
 
 figure(3);
-plot(vas_ln_mat,new_corr_coefficient);
+yyaxis left
+plot(vas_ln_mat,new_corr_coefficient);ylim([0,1]);
 title([{'Correlation between energy consumption and'},{ 'error contribution across the hidden number'}]);
  xlabel('No. of Hidden Neurons'); ylabel ('Correlation coefficient')
+ yyaxis right
+ plot(vas_ln_mat,succ);ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex');ylim([0,1]);
+ figure;
+ yyaxis left
+ NNew=mean(new_corr_coefficient,2);
+figure;(plot(vas_ln_mat,NNew));ylim([0,1])
+title([{'Correlation between energy consumption and'},{ 'error contribution across the hidden number'}]);
+ xlabel('No. of Hidden Neurons'); ylabel ('Correlation coefficient')
+ yyaxis right
+ plot(vas_ln_mat,mean(succ,2));ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex');ylim([0,1]);
+ 
+ Eff=100*(succ-succ(1,:))./Esave;
+ 
+ figure;
+yyaxis left
+(plot(vas_ln_mat,NNew));ylim([0,1]);
+title([{'Correlation between energy consumption and'},{ 'error contribution across the hidden number'}]);
+xlabel('No. of Hidden Neurons'); ylabel ('Correlation coefficient');
+yyaxis right
+plot(vas_ln_mat,mean(Eff,2));
+ylim([0 1]);ylabel('Energy Efficiency');
