@@ -77,7 +77,7 @@ end
 % ylabel(han,'Delta RMSE by neuron j');
 %      xlabel(han,'Energy Consumed by the neuron j')
 
-figure(3);
+figure(1);
 yyaxis left
 plot(vas_ln_mat,new_corr_coefficient);ylim([0,1]);
 title([{'Correlation between energy consumption and'},{ 'error contribution across the hidden number'}]);
@@ -87,15 +87,17 @@ title([{'Correlation between energy consumption and'},{ 'error contribution acro
  figure;
  yyaxis left
  NNew=mean(new_corr_coefficient,2);
-figure;(plot(vas_ln_mat,NNew));ylim([0,1])
+figure(2);
+yyaxis left
+(plot(vas_ln_mat,NNew));ylim([0,1])
 title([{'Correlation between energy consumption and'},{ 'error contribution across the hidden number'}]);
  xlabel('No. of Hidden Neurons'); ylabel ('Correlation coefficient')
  yyaxis right
- plot(vas_ln_mat,mean(succ,2));ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex');ylim([0,1]);
+ plot(vas_ln_mat,mean(succ*100,2));ylabel('Test Accuracy');ylim([0,100]);
  
  Eff=100*(succ-succ(1,:))./Esave;
  
- figure;
+ figure(3);
 yyaxis left
 (plot(vas_ln_mat,NNew));ylim([0,1]);
 title([{'Correlation between energy consumption and'},{ 'error contribution across the hidden number'}]);

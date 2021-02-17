@@ -26,9 +26,9 @@ hold on;
 
 figure(2);
        yyaxis left
-       ylim([0,1])
-    plot(Energy(loc),ACC(k,loc)/100); xlabel('Energy at Root Node');
-    ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex')
+       ylim([0,100])
+    plot(Energy(loc),ACC(k,loc)); xlabel('Energy at Root Node');
+    ylabel('Test Accuracy')
     hold on;
        yyaxis right; ylim([0,1])
     plot(Energy(loc),EFFnew(k,loc));ylabel('Energy Efficiency');
@@ -39,9 +39,9 @@ legend('k=2','k=3','k=4','k=6','k=8','k=32','k=512');
 figure(10);
 
  yyaxis left
-       ylim([0,1])
-    plot(Energy(loc),ACC(loc_comp,loc)/100); xlabel('Energy at Root Node');
-    ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex')
+       ylim([0,100])
+    plot(Energy(loc),ACC(loc_comp,loc)); xlabel('Energy at Root Node');
+    ylabel('Test Accuracy')
     hold on;
        yyaxis right
        ylim([0,1])
@@ -63,9 +63,9 @@ for k =1:numel(branching)
         xlabel('Root node energy');
         figure(4);
        yyaxis left
-       ylim([0,1])
-    plot(evec,Acc(k,:)/100); xlabel('Energy at Root Node');
-    ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex')
+       ylim([0,100])
+    plot(evec,Acc(k,:)); xlabel('Energy at Root Node');
+    ylabel('Test Accuracy')
     hold on;
        yyaxis right;  ylim([0,1])
     plot(evec,efficiency(k,:));ylabel('Energy Efficiency');
@@ -78,7 +78,7 @@ figure(4);legend('k=2','k=3','k=4','k=6','k=8','k=32','k=512');
 tr1=1:size(Acc_trials,2);
 chosenk=find(branching==chosen_k);
 for i=1:numel(tr1)
-    acc_chosen(i,:)=Acc_trials{chosenk,i}/100;
+    acc_chosen(i,:)=Acc_trials{chosenk,i};
     eff_chosen(i,:)=Eff_trials{chosenk,i};
 end
 
@@ -93,12 +93,12 @@ figure(10);
 mean_master(1,:)=mean_acc(loc);
 std_master(1,:)=std_acc(loc);
  yyaxis left
-       ylim([0,1])
+       ylim([0,100])
    
 
-    plot(Energy(loc),Acc(loc_comp,loc)/100); 
+    plot(Energy(loc),Acc(loc_comp,loc)); 
       xlabel('Energy at Root Node');
-    ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex')
+    ylabel('Test Accuracy')
     hold on;
        yyaxis right
        ylim([0,1])
@@ -122,11 +122,11 @@ for k =1:numel(branching)
         xlabel('Root node energy');
         figure(6);
        yyaxis left
-       ylim([0,1])
-    plot(evec,ACC(k,:)/100);
+       ylim([0,100])
+    plot(evec,ACC(k,:));
      
       xlabel('Energy at Root Node');
-    ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex')
+    ylabel('Test Accuracy')
     hold on;
        yyaxis right; ylim([0,1]);
     plot(evec,efficiency(k,:));ylabel('Energy Efficiency');
@@ -140,7 +140,7 @@ figure(6);legend('k=2','k=3','k=4','k=6','k=8','k=32','k=512');
 tr1=1:size(Acc_trials,2);
 chosenk=find(branching==chosen_k);
 for i=1:numel(tr1)
-    acc_chosen(i,:)=Acc_trials{chosenk,i}/100;
+    acc_chosen(i,:)=Acc_trials{chosenk,i};
     eff_chosen(i,:)=Eff_trials{chosenk,i};
 end
 
@@ -155,12 +155,12 @@ std_master(2,:)=std_acc(loc);
 figure(10);
 
  yyaxis left
-       ylim([0,1])
-    plot(Energy(loc),ACC(loc_comp,loc)/100); 
+       ylim([0,100])
+    plot(Energy(loc),ACC(loc_comp,loc)); 
      
 %     ; 
       xlabel('Energy at Root Node');
-    ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex')
+    ylabel('Test Accuracy')
     hold on;
        yyaxis right
        ylim([0,1])

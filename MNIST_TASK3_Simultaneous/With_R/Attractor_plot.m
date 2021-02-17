@@ -12,7 +12,7 @@ for j=1:numel(vas_ln_mat)
     for i=1:numel(wallowable)
         % str = strcat('C:\Users\Bhadra\Documents\GitHub\Vascular_Tree\task_3_parallel\negfb0.008\high_etavas_delefb_low_Neg_fb_inctest_',num2str(wallowable(i)),'_ln_',num2str(vas_ln_mat(j)),'.mat');
 %         str = strcat('/home/sowmya/Desktop/adj_matrix_model/task_3_parallel/adapted_wallowable/debug_525/negative_fb_-0.005/ln_', num2str(vas_ln_mat(j)), '_wallow_', num2str(wallowable(i)), '_trial_1.mat');
-        str=strcat('C:\Users\Bhadra\Documents\GitHub\Vascular_Tree\task_3_parallel\adapted_wallowable\debug_525\negative_fb_-0.005\ln_',num2str(vas_ln_mat(j)),'_wallow_',num2str(wallowable(i)),'_trial_1.mat');
+        str=strcat('D:\github_desktop\ANVN_FINAL\MNIST_TASK3_Simultaneous\With_R\negative_fb_-0.005\ln_',num2str(vas_ln_mat(j)),'_wallow_',num2str(wallowable(i)),'_trial_1.mat');
         % str=strcat('C:\Users\Bhadra\Documents\GitHub\Vascular_Tree\task_3_k_ln_reservoir\adapted_wallowable\run2\ln_',num2str(vas_ln_mat(j)),'_wallow_',num2str(wallowable(i)),'_trial_1.mat');
         % str=strcat('C:\Users\Bhadra\Documents\GitHub\Vascular_Tree\task_3_k_ln_reservoir\adapted_wallowable\random_wvasc\ln_',num2str(vas_ln_mat(j)),'_wallow_',num2str(wallowable(i)),'_trial_1.mat');
 

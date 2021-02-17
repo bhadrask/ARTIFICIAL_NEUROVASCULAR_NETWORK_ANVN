@@ -32,14 +32,16 @@ for j=1:numel(wallowable_fraction)
     ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex')
     hold on;
        yyaxis right
-    plot(vas_ln_mat,eff(j,:));ylabel('Normalized Energy Efficiency'); hold on;
+    plot(vas_ln_mat,eff(j,:));ylabel('Energy Efficiency'); hold on;
 end
  legend('E0=0.2','E0=0.4','E0=0.6','E0=0.8','E0=1');
 
 figure();
 yyaxis left
- plot(vas_ln_mat,mean(stracc,1));
+ plot(vas_ln_mat,mean(stracc,1));  ylabel('Test Accuracy')
  ac2=mean(stracc,1);
  hold on;
        yyaxis right
-  plot(vas_ln_mat,(mean(stracc,1)-ac2(1))./mean(energy,1));
+  plot(vas_ln_mat,(mean(stracc,1)-ac2(1))./mean(energy,1)); ylabel('Energy Efficiency');
+ xlabel('Number of neurons in the hidden layer');
+  title('Accuracy and Energy efficiency across number of hidden neurons: MNIST data')

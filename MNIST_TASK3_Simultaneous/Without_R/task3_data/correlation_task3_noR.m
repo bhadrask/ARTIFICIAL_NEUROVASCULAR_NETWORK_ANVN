@@ -70,7 +70,7 @@ title([{'Correlation between energy consumption and'},{ 'error contribution acro
 xlabel('Input Energy'); ylabel ('Correlation coefficient');
 yyaxis right
 
-plot(en,SUCC(k,:));
+plot(en,100*SUCC(k,:));
 ylim([0 1]);ylabel ('Test accuracy');hold on;
 
  end
@@ -92,8 +92,8 @@ title([{'Correlation between energy consumption and'},{ 'error contribution acro
 xlabel('Input Energy'); ylabel ('Correlation coefficient');
 yyaxis right
 
-plot(en,mean(SUCC,1));
-ylim([0 1]);ylabel('$\frac{Test Accuracy}{100}$','Interpreter','latex');
+plot(en,100*mean(SUCC,1));
+ylim([0 100]);ylabel('Test Accuracy');
 
 effi=100*(SUCC-SUCC(:,1))./en;
 
